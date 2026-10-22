@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Notes — Research Notebook (Public)</title>
+<style>
+  :root{
+    --bg:#0d0f14; --panel:#141822; --panel2:#1a2030; --line:#2a3245;
+    --txt:#e8ecf4; --dim:#9aa5bd; --amber:#f2a93b; --cyan:#37c8e0;
+    --red:#e5484d; --green:#46c17a; --silver:#c7cdd9;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; padding-bottom:60px;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding:0 16px;}
+  header{
+    padding:40px 0 28px; border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#11151f 0%, var(--bg) 100%);
+  }
+  .kicker{color:var(--amber); font-size:12px; letter-spacing:2.5px; text-transform:uppercase; font-weight:700;}
+  h1{font-size:30px; line-height:1.2; margin:10px 0 6px; font-weight:800;}
+  .sub{color:var(--dim); font-size:14.5px; max-width:64ch;}
+  .search-row{display:flex; gap:12px; align-items:center; margin-top:26px; flex-wrap:wrap;}
+  .search-box{position:relative; flex:1; min-width:260px;}
+  .search-box .icon{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:15px; pointer-events:none;}
+  #q{
+    width:100%; padding:11px 14px 11px 38px; font-size:14.5px;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; color:var(--txt);
+  }
+  #q:focus{outline:none; border-color:var(--cyan);}
+  #count{color:var(--dim); font-size:13px; white-space:nowrap;}
+  .cat-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .cat-btn{
+    font-size:12px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase;
+    padding:6px 14px; border-radius:20px; border:1px solid var(--line);
+    background:var(--panel); color:var(--dim); cursor:pointer;
+  }
+  .cat-btn.active{background:rgba(55,200,224,.12); color:var(--cyan); border-color:rgba(55,200,224,.4);}
+  .cat-btn:hover{color:var(--txt);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; margin-top:26px;}
+  .entry{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px;
+    display:flex; flex-direction:column; transition:border-color .15s, transform .15s;
+  }
+  .entry a{color:inherit; text-decoration:none; flex:1; display:flex; flex-direction:column;}
+  .entry:hover{border-color:var(--cyan); transform:translateY(-2px);}
+  .entry .kicker{margin-bottom:8px;}
+  .entry h2{font-size:17px; line-height:1.3; margin:0 0 8px; font-weight:700; color:var(--txt);}
+  .entry p{font-size:13.5px; color:var(--dim); margin:0 0 14px; flex:1;}
+  .meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:auto;}
+  .tag{display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; padding:3px 9px; border-radius:20px;}
+  .tag.amber{background:rgba(242,169,59,.15); color:var(--amber); border:1px solid rgba(242,169,59,.4);}
+  .tag.cyan{background:rgba(55,200,224,.12); color:var(--cyan); border:1px solid rgba(55,200,224,.4);}
+  .tag.red{background:rgba(229,72,77,.13); color:var(--red); border:1px solid rgba(229,72,77,.4);}
+  .tag.green{background:rgba(70,193,122,.12); color:var(--green); border:1px solid rgba(70,193,122,.4);}
+  .pod{margin-left:auto; font-size:11.5px; color:var(--cyan); font-weight:700; white-space:nowrap;}
+  .empty{display:none; margin-top:30px; padding:30px; text-align:center; color:var(--dim); border:1px dashed var(--line); border-radius:12px; font-size:14.5px;}
+  footer{margin-top:48px; padding-top:18px; border-top:1px solid var(--line); color:var(--dim); font-size:12.5px;}
+  footer a{color:var(--dim);}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="kicker">Research Notebook · Public</div>
+    <h1>Field Notes</h1>
+    <p class="sub">Research write-ups, gift guides and project records — shared publicly. New entries land here as the work happens; search or filter to find what you need.</p>
+    <div class="search-row">
+      <div class="search-box">
+        <span class="icon">⌕</span>
+        <input id="q" type="search" placeholder="Search notes — e.g. wedding, F1, Vettel, Alonso…" autocomplete="off">
+      </div>
+      <span id="count"></span>
+    </div>
+    <div class="cat-row" id="cats">
+      <button class="cat-btn active" data-cat="all">All</button>
+      <button class="cat-btn" data-cat="deep-dive">Deep dives</button>
+      <button class="cat-btn" data-cat="buyers-guide">Buyer's guides</button>
+      <button class="cat-btn" data-cat="project">Projects</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="grid" id="grid">
+
+    <div class="entry" data-cat="project" data-search="wedding gift ideas experience days virgin hot air balloon helicopter shard aqua harrods fortnum ramsey lucky cat heartwood raymond blanc river cruise wetherby bannatyne lush supercar driving alonso aston martin f1 vettel ferrari red bull rb9 minichamps helmet 1:2 1:5 1:43 drm helmets spark monaco flexfit cap wedding gift f1 memorabilia">
+      <a href="entries/wedding-gifts-2026/">
+        <div class="kicker">Project · 21 Oct 2026</div>
+        <h2>Craig &amp; Jerry's Wedding — Gift Ideas</h2>
+        <p>Group wedding present research: couple's experience days (£50–140, mostly Virgin Experience Days with GIFT20 codes) and an F1 gift for Craig — Alonso at Aston Martin now, Vettel historically — helmets, model cars and caps with prices and links.</p>
+        <div class="meta"><span class="tag amber">gifts</span><span class="tag cyan">f1</span><span class="tag green">wedding</span></div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="empty" id="empty">No notes match that search. Try a broader term, or <a href="/" style="color:var(--cyan)">reset the filters</a>.</div>
+
+  <footer>
+    <p>Maintained by Henry · entries are self-contained pages, each with its own sources. Search runs locally in your browser — nothing is tracked.</p>
+  </footer>
+</div>
+<script>
+(function(){
+  var q = document.getElementById('q');
+  var grid = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+  var count = document.getElementById('count');
+  var entries = Array.prototype.slice.call(grid.querySelectorAll('.entry'));
+  var activeCat = 'all';
+
+  function apply(){
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    entries.forEach(function(e){
+      var hay = e.getAttribute('data-search') + ' ' + e.textContent.toLowerCase();
+      var okCat = activeCat === 'all' || e.getAttribute('data-cat') === activeCat;
+      var okTerm = !term || hay.indexOf(term) !== -1;
+      var show = okCat && okTerm;
+      e.style.display = show ? '' : 'none';
+      if (show) shown++;
+    });
+    count.textContent = shown + (shown === 1 ? ' entry' : ' entries');
+    empty.style.display = shown === 0 ? 'block' : 'none';
+  }
+
+  q.addEventListener('input', apply);
+  document.getElementById('cats').addEventListener('click', function(ev){
+    var btn = ev.target.closest('.cat-btn');
+    if (!btn) return;
+    document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    activeCat = btn.getAttribute('data-cat');
+    apply();
+  });
+  apply();
+})();
+</script>
+</body>
+</html>
